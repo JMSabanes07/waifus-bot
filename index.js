@@ -38,6 +38,7 @@ client.on("message", async (message) => {
     console.log(category);
     if (categoriesArray.indexOf(category) === -1) {
       console.log("no existe");
+      message.reply("No se que es eso manito");
     } else {
       console.log("existe");
       try {
