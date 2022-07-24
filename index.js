@@ -53,6 +53,8 @@ client.on("message", async (message) => {
       } else {
         await message.reply("aca hay un error con la api manito");
       }
+    }).catch((err) => {
+      await message.reply(err);
     });
     // const response = await fetch(`${url}/sfw/${category}`);
   }
