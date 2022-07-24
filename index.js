@@ -46,8 +46,6 @@ client.on("message", async (message) => {
           const data = await response.json();
           console.log(data);
           const media = await MessageMedia.fromUrl(data.url);
-          media.mimetype = "image/jpg";
-          media.filename = "a.jpg";
           console.log(media);
           client.sendMessage(message.id.remote, media);
         } else {
