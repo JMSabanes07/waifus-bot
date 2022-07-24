@@ -24,52 +24,63 @@ client.on("authenticated", (session) => {
   console.log("tas autenticao");
 });
 
+const categories = `
+waifu       
+neko
+shinobu
+megumin
+bullyW
+cuddle
+cry
+hug
+awoo
+kiss
+lick
+pat
+smug
+bonk
+yeet
+blush
+smile
+wave
+highfive
+handhold
+nom
+bite
+glomp
+slap
+kill
+kick
+happy
+wink
+poke
+dance
+cringe`;
+
 client.on("message", async (message) => {
   const url = `https://api.waifu.pics`;
   if (message.body.match(/que categorias hay/i)) {
     message.reply(`Podes consultar las siguientes categorias:
-    waifu       
-    neko
-    shinobu
-    megumin
-    bullyW
-    cuddle
-    cry
-    hug
-    awoo
-    kiss
-    lick
-    pat
-    smug
-    bonk
-    yeet
-    blush
-    smile
-    wave
-    highfive
-    handhold
-    nom
-    bite
-    glomp
-    slap
-    kill
-    kick
-    happy
-    wink
-    poke
-    dance
-    cringe`);
+    ${categories}`);
   }
   if (message.body.match(/quiero una/i) || message.body.match(/quiero un/i)) {
     const category = message.body.split(" ").pop();
     console.log(category);
+    if (categories.search(category) != -1) {
+      console.log("existe");
+    } else {
+      console.log("no existe");
+    }
     const response = await fetch(`${url}/sfw/${category}`);
     console.log(response);
-    const data = await response.json();
-    console.log(data);
-    const media = await MessageMedia.fromUrl(data.url);
-    console.log(media);
-    await client.sendMessage(message.id.remote, media);
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log(data);
+      const media = await MessageMedia.fromUrl(data.url);
+      console.log(media);
+      await client.sendMessage(message.id.remote, media);
+    } else {
+    }
   }
 });
 
