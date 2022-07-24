@@ -24,64 +24,37 @@ client.on("authenticated", (session) => {
   console.log("tas autenticao");
 });
 
-const categories = `
-waifu       
-neko
-shinobu
-megumin
-bullyW
-cuddle
-cry
-hug
-awoo
-kiss
-lick
-pat
-smug
-bonk
-yeet
-blush
-smile
-wave
-highfive
-handhold
-nom
-bite
-glomp
-slap
-kill
-kick
-happy
-wink
-poke
-dance
-cringe`;
+const categories = `waifu, neko, shinobu, megumin, bullyW, cuddle, cry, hug, awoo, kiss, lick, pat, smug, bonk, yeet, blush, smile, wave, highfive, handhold, nom, bite, glomp, slap, kill, kick, happy, wink, poke, dance, cringe`;
+
+const categoriesArray = categories.split(", ");
 
 client.on("message", async (message) => {
   const url = `https://api.waifu.pics`;
   if (message.body.match(/que categorias hay/i)) {
-    message.reply(`Podes consultar las siguientes categorias:
-    ${categories}`);
+    message.reply(`Podes consultar las siguientes categorias: ${categories}`);
   }
   if (message.body.match(/quiero una/i) || message.body.match(/quiero un/i)) {
     const category = message.body.split(" ").pop();
     console.log(category);
-    if (categories.search(category) != -1) {
+    if (categoriesArray.indexOf(category) > -1) {
       console.log("existe");
     } else {
       console.log("no existe");
     }
-    const response = await fetch(`${url}/sfw/neko`);
+    fetch(`${url}/sfw/neko`).then(async (response) => {
+      console.log(response);
+      console.log(response.status);
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data);
+        const media = await MessageMedia.fromUrl(data.url);
+        console.log(media);
+        await client.sendMessage(message.id.remote, media);
+      } else {
+        await message.reply("aca hay un error con la api manito");
+      }
+    });
     // const response = await fetch(`${url}/sfw/${category}`);
-    console.log(response);
-    if (response.status === 200) {
-      const data = await response.json();
-      console.log(data);
-      const media = await MessageMedia.fromUrl(data.url);
-      console.log(media);
-      await client.sendMessage(message.id.remote, media);
-    } else {
-    }
   }
 });
 
