@@ -40,17 +40,21 @@ client.on("message", async (message) => {
       console.log("no existe");
     } else {
       console.log("existe");
-      const response = await fetch(`${url}/sfw/${category}`);
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log(data);
-        const media = await MessageMedia.fromUrl(data.url);
-        media.mimetype = "image/jpg";
-        media.filename = "a.jpg";
-        console.log(media);
-        client.sendMessage(message.id.remote, media);
-      } else {
-        message.reply("aca hay un error con la api manito");
+      try {
+        const response = await fetch(`https://api.waifu.pics/sfw/${category}`);
+        if (response.status === 200) {
+          const data = await response.json();
+          console.log(data);
+          const media = await MessageMedia.fromUrl(data.url);
+          media.mimetype = "image/jpg";
+          media.filename = "a.jpg";
+          console.log(media);
+          client.sendMessage(message.id.remote, media);
+        } else {
+          message.reply("aca hay un error con la api manito");
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }
