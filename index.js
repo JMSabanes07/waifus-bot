@@ -36,29 +36,23 @@ client.on("message", async (message) => {
   if (message.body.match(/quiero una/i) || message.body.match(/quiero un/i)) {
     const category = message.body.split(" ").pop();
     console.log(category);
-    if (categoriesArray.indexOf(category) > -1) {
-      console.log("existe");
-    } else {
+    if (categoriesArray.indexOf(category) === -1) {
       console.log("no existe");
+    } else {
+      console.log("existe");
+      const response = await fetch(`${url}/sfw/${category}`);
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data);
+        const media = await MessageMedia.fromUrl(data.url);
+        media.mimetype = "image/jpg";
+        media.filename = "a.jpg";
+        console.log(media);
+        client.sendMessage(message.id.remote, media);
+      } else {
+        message.reply("aca hay un error con la api manito");
+      }
     }
-    fetch(`${url}/sfw/neko`)
-      .then(async (response) => {
-        console.log(response);
-        console.log(response.status);
-        if (response.status === 200) {
-          const data = await response.json();
-          console.log(data);
-          const media = await MessageMedia.fromUrl(data.url);
-          console.log(media);
-          await client.sendMessage(message.id.remote, media);
-        } else {
-          await message.reply("aca hay un error con la api manito");
-        }
-      })
-      .catch(async (err) => {
-        await message.reply(err);
-      });
-    // const response = await fetch(`${url}/sfw/${category}`);
   }
 });
 
