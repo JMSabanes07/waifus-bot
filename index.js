@@ -71,7 +71,8 @@ client.on("message", async (message) => {
     } else {
       console.log("no existe");
     }
-    const response = await fetch(`${url}/sfw/${category}`);
+    const response = await fetch(`${url}/sfw/neko`);
+    // const response = await fetch(`${url}/sfw/${category}`);
     console.log(response);
     if (response.status === 200) {
       const data = await response.json();
