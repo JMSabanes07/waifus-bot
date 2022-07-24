@@ -62,9 +62,13 @@ client.on("message", async (message) => {
   }
   if (message.body.match(/quiero una/i) || message.body.match(/quiero un/i)) {
     const category = message.body.split(" ").pop();
+    console.log(category);
     const response = await fetch(`${url}/sfw/${category}`);
+    console.log(response);
     const data = await response.json();
+    console.log(data);
     const media = await MessageMedia.fromUrl(data.url);
+    console.log(media);
     await client.sendMessage(message.id.remote, media);
   }
 });
