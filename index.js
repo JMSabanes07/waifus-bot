@@ -5,6 +5,7 @@ const fetch = require("node-fetch");
 
 const client = new Client({
   authStrategy: new LocalAuth(),
+  puppeteer: { product: "chrome", executablePath: "/usr/bin/chromium-browser" },
 });
 
 client.on("qr", qr => {
