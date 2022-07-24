@@ -1,6 +1,6 @@
 //wp web api
 const qrcode = require("qrcode-terminal");
-const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
+const { Client, MessageMedia, LocalAuth } = require("whatsapp-web.js");
 const fetch = require("node-fetch");
 
 const client = new Client({
@@ -12,7 +12,7 @@ const client = new Client({
   },
 });
 
-client.on("qr", qr => {
+client.on("qr", (qr) => {
   qrcode.generate(qr, { small: true });
 });
 
@@ -20,7 +20,11 @@ client.on("ready", () => {
   console.log("Client is ready!");
 });
 
-client.on("message", async message => {
+client.on("authenticated", (session) => {
+  console.log("tas autenticao");
+});
+
+client.on("message", async (message) => {
   const url = `https://api.waifu.pics`;
   if (message.body.match(/que categorias hay/i)) {
     message.reply(`Podes consultar las siguientes categorias:
@@ -28,7 +32,7 @@ client.on("message", async message => {
     neko
     shinobu
     megumin
-    bully
+    bullyW
     cuddle
     cry
     hug
@@ -63,10 +67,6 @@ client.on("message", async message => {
     const media = await MessageMedia.fromUrl(data.url);
     await client.sendMessage(message.id.remote, media);
   }
-});
-
-client.on("authenticated", session => {
-  console.log("tas autenticao");
 });
 
 client.initialize();
