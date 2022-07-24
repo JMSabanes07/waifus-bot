@@ -41,21 +41,23 @@ client.on("message", async (message) => {
     } else {
       console.log("no existe");
     }
-    fetch(`${url}/sfw/neko`).then(async (response) => {
-      console.log(response);
-      console.log(response.status);
-      if (response.status === 200) {
-        const data = await response.json();
-        console.log(data);
-        const media = await MessageMedia.fromUrl(data.url);
-        console.log(media);
-        await client.sendMessage(message.id.remote, media);
-      } else {
-        await message.reply("aca hay un error con la api manito");
-      }
-    }).catch((err) => {
-      await message.reply(err);
-    });
+    fetch(`${url}/sfw/neko`)
+      .then(async (response) => {
+        console.log(response);
+        console.log(response.status);
+        if (response.status === 200) {
+          const data = await response.json();
+          console.log(data);
+          const media = await MessageMedia.fromUrl(data.url);
+          console.log(media);
+          await client.sendMessage(message.id.remote, media);
+        } else {
+          await message.reply("aca hay un error con la api manito");
+        }
+      })
+      .catch(async (err) => {
+        await message.reply(err);
+      });
     // const response = await fetch(`${url}/sfw/${category}`);
   }
 });
